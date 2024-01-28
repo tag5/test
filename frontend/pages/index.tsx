@@ -16,10 +16,28 @@ const GET_SPACE_X_LAUNCHES = gql`
 const PAGE_SIZE = 10;
 
 export default function Home() {
-  const { loading, error, data } = useQuery(GET_SPACE_X_LAUNCHES, {
+  const { loading, error, data, fetchMore } = useQuery(GET_SPACE_X_LAUNCHES, {
     client,
     variables: { offset: 0, limit: PAGE_SIZE },
   });
+
+  const onButtonLoadMoreClick = async () => {
+    fetchMore({
+      variables: {
+        offset: data.getSpaceXLaunchesWithOffsetAndLimit.length,
+        limit: PAGE_SIZE,
+      },
+      updateQuery: (prev, { fetchMoreResult }) => {
+        if (!fetchMoreResult) return prev;
+        return Object.assign({}, prev, {
+          getSpaceXLaunchesWithOffsetAndLimit: [
+            ...prev.getSpaceXLaunchesWithOffsetAndLimit,
+            ...fetchMoreResult.getSpaceXLaunchesWithOffsetAndLimit,
+          ],
+        });
+      },
+    });
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <p>Error : {error.message}</p>;
@@ -29,6 +47,9 @@ export default function Home() {
       {data && (
         <div>
           <SpaceXLaunchesTable launches={data.getSpaceXLaunchesWithOffsetAndLimit} />
+          <div>
+            <button onClick={onButtonLoadMoreClick}>Load More</button>
+          </div>
         </div>
       )}
     </div>
