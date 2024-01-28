@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 interface SpaceXLaunchesTableProps {
   launches: Array<{
     id: string
@@ -18,7 +20,9 @@ const SpaceXLaunchesTable: React.FC<SpaceXLaunchesTableProps> = ({ launches }) =
     <tbody>
     {launches.map((launch: any) => (
       <tr key={launch.id}>
-        <td>{launch.id}</td>
+        <td>
+          <Link href={`/launch/${launch.id}`}>{launch.id}</Link>
+        </td>
         <td>{launch.name}</td>
         <td>{launch.date_local}</td>
       </tr>
