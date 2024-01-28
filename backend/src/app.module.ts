@@ -8,7 +8,7 @@ import { SpaceXService } from './spacex.service';
 @Module({
   imports: [
     CacheModule.register({ store: 'memory', isGlobal:true }),
-    GraphQLModule.forRoot<ApolloDriverConfig>({ driver: ApolloDriver, playground: true, autoSchemaFile: true }),
+    GraphQLModule.forRoot<ApolloDriverConfig>({ driver: ApolloDriver, playground: false, autoSchemaFile: true }),
   ],
   providers: [
     SpaceXService,
