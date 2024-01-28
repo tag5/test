@@ -15,10 +15,19 @@ describe('AppController (e2e)', () => {
     await app.init();
   });
 
-  it('/ (GET)', () => {
+  it('graphql test', () => {
     return request(app.getHttpServer())
-      .get('/')
+      .post('/graphql')
+      .send({
+        operationName: null,
+        variables: {},
+        query: 'query { getSpaceXLaunchById(id: "5eb87cd9ffd86e000604b32a") { name } }',
+      })
       .expect(200)
-      .expect('Hello World!');
+      .expect((response) => {
+        expect(response.body).toEqual({
+          data: { getSpaceXLaunchById: { name: 'FalconSat' } }
+        });
+      });
   });
 });
